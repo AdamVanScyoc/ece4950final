@@ -1,6 +1,6 @@
 
-p = traverse('rgy_', 'ryg_')
+shortest_path = traverse('rgy_', 'ryg_')
 
-c = convert(p)
+positions = convert(shortest_path)
 
-enact(c)
+enact(positions)

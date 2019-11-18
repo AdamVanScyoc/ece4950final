@@ -34,7 +34,7 @@ for i = 1:length(updown)
     fprintf("MAGNET OFF\n\n");
 %     set_param('Final_Project_Controller/Magnet', 'value', MAGNET_OFF);
     pause(2);
-    
+end    
 
 end
 
