@@ -16,7 +16,7 @@ end
 words = cellstr(words);
 G = graph(adjmat, words);
 
-plot(G);
+% plot(G);
 
 path = shortestpath(G, startpos, endpos)
 

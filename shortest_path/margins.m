@@ -1,4 +1,4 @@
-clear;
 
-p = traverse('rbgrbgrbg_', 'rrrbbbggg_')
+p = traverse('rgy_', 'ryg_')
 
+c = convert(p)
