@@ -6,15 +6,22 @@ classdef gui_final < matlab.apps.AppBase
         ReadBoardButton            matlab.ui.control.Button
         DecodeQRButton             matlab.ui.control.Button
         StartButton                matlab.ui.control.Button
-        UITable                    matlab.ui.control.Table
+        UITableInitConfig          matlab.ui.control.Table
         InitialConfigurationLabel  matlab.ui.control.Label
-        UITable_2                  matlab.ui.control.Table
+        UITableFinalConfig matlab.ui.control.Table
         Label                      matlab.ui.control.Label
         FinalConfigurationLabel    matlab.ui.control.Label
         SolveTimeEditFieldLabel    matlab.ui.control.Label
         SolveTimeEditField         matlab.ui.control.NumericEditField
         Button                     matlab.ui.control.Button
         UIAxes                     matlab.ui.control.UIAxes
+        % init_config stores the initial configuration of the board
+        % to be stored in the Initial Configuration table.
+        init_config                string
+        % final_config stores the final configuration of the board
+        % as decoded from the QR code; stored in the Final Configuration
+        % table.
+        final_config               string
     end
 
 
@@ -40,7 +47,7 @@ classdef gui_final < matlab.apps.AppBase
             %             start(vid);
             
             %setappdata(0,'vid',vid);
-            setappdata(0,'nmaxframes',nmaxframes);
+            %setappdata(0,'nmaxframes',nmaxframes);
         end
 
         % Button pushed function: DecodeQRButton
@@ -89,6 +96,16 @@ classdef gui_final < matlab.apps.AppBase
             % title_txt = sprintf('Image %s',message);
             %             end
             msgbox(message);
+            app.final_config = message;
+            d = {1, 'R'; 2, 'G'; 3, 'B'};
+            a = [];
+            for b = 1:length(message)
+                a(b) = int32(b);
+            end
+            data = [num2cell(a); num2cell(message)]';
+            app.UITableFinalConfig.Data = data;
+            %app.UITableInitConfig.Data = num2cell(app.init_config);
+            
             
             clear source;
             clear jimg;
@@ -154,22 +171,22 @@ classdef gui_final < matlab.apps.AppBase
             app.StartButton.Position = [467 378 146 81];
             app.StartButton.Text = 'Start';
 
-            % Create UITable
-            app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Location'; 'Color'};
-            app.UITable.RowName = {};
-            app.UITable.Position = [5 104 186 231];
+             % Create UITableInitConfig
+            app.UITableInitConfig = uitable(app.UIFigure);
+            app.UITableInitConfig.ColumnName = {'Location'; 'Color'};
+            app.UITableInitConfig.RowName = {};
+            app.UITableInitConfig.Position = [5 104 186 231];
 
             % Create InitialConfigurationLabel
             app.InitialConfigurationLabel = uilabel(app.UIFigure);
             app.InitialConfigurationLabel.Position = [42 343 111 15];
             app.InitialConfigurationLabel.Text = 'Initial Configuration';
 
-            % Create UITable_2
-            app.UITable_2 = uitable(app.UIFigure);
-            app.UITable_2.ColumnName = {'Location'; 'Color'};
-            app.UITable_2.RowName = {};
-            app.UITable_2.Position = [207 104 186 231];
+            % Create UITableFinalConfig
+            app.UITableFinalConfig = uitable(app.UIFigure);
+            app.UITableFinalConfig.ColumnName = {'Location'; 'Color'};
+            app.UITableFinalConfig.RowName = {};
+            app.UITableFinalConfig.Position = [207 104 186 231];
 
             % Create Label
             app.Label = uilabel(app.UIFigure);
