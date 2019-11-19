@@ -112,6 +112,15 @@ classdef gui_final < matlab.apps.AppBase
         function StartButtonPushed(app, event)
             
         end
+        
+        % Button pushed function: Read Board
+        function ReadButtonPushed(app, event)
+            addpath './cv'
+            final_cv
+            % rotate 90 degrees now
+            final_cv
+            rmpath './cv'
+        end
     end
 
     % App initialization and construction
@@ -127,6 +136,7 @@ classdef gui_final < matlab.apps.AppBase
 
             % Create ReadBoardButton
             app.ReadBoardButton = uibutton(app.UIFigure, 'push');
+            app.ReadBoardButton.ButtonPushedFcn = createCallbackFcn(app, @ReadButtonPushed, true);
             app.ReadBoardButton.Icon = 'apoorvakapadia.jpg';
             app.ReadBoardButton.BackgroundColor = [1 0 0];
             app.ReadBoardButton.FontSize = 18;
