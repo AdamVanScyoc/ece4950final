@@ -1,6 +1,7 @@
 function rVal = final_cv()
 
-    im = imread('./final_sample.jpg');
+    %im = imread('./final_sample.jpg');
+    im = 
 
     dims = size(im);
     rows = dims(1);
