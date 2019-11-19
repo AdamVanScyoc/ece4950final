@@ -33,18 +33,18 @@ classdef gui_final < matlab.apps.AppBase
             %             imaqreset; % reset device configuration. helps release open device handles.
             %             
             %             % user inputs 
-            %             nmaxframes = 40000; % how many frames should be displayed during trial?
-            %             nframegrab = 1; % get every nth frame from the camera
+                         nmaxframes = 40000; % how many frames should be displayed during trial?
+                         nframegrab = 1; % get every nth frame from the camera
             %             
             %             % create the video input object. specify the image format and size
-            %             vid = videoinput('winvideo', 1, 'MJPG_640x480'); % capture a RGB image of size 640x480 pixels
+                         vid = videoinput('winvideo', 1, 'MJPG_640x480'); % capture a RGB image of size 640x480 pixels
             %             
             %             % Set video input object properties for this application.
-            %             set(vid,'TriggerRepeat',Inf);
-            %             vid.FrameGrabInterval = nframegrab; % grab every nth frame from the device
+                         set(vid,'TriggerRepeat',Inf);
+                         vid.FrameGrabInterval = nframegrab; % grab every nth frame from the device
             %             
             %             % Start acquiring frames.
-            %             start(vid);
+                         start(vid);
             
             %setappdata(0,'vid',vid);
             %setappdata(0,'nmaxframes',nmaxframes);
