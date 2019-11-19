@@ -6,24 +6,18 @@ classdef gui_final < matlab.apps.AppBase
         ReadBoardButton            matlab.ui.control.Button
         DecodeQRButton             matlab.ui.control.Button
         StartButton                matlab.ui.control.Button
-        UITableInitConfig                    matlab.ui.control.Table
+        UITable                    matlab.ui.control.Table
         InitialConfigurationLabel  matlab.ui.control.Label
-        UITableFinalConfig                  matlab.ui.control.Table
+        UITable_2                  matlab.ui.control.Table
         Label                      matlab.ui.control.Label
         FinalConfigurationLabel    matlab.ui.control.Label
         SolveTimeEditFieldLabel    matlab.ui.control.Label
         SolveTimeEditField         matlab.ui.control.NumericEditField
         Button                     matlab.ui.control.Button
         UIAxes                     matlab.ui.control.UIAxes
-        
-        % game properties
-            % init_config is a string that contains the initial board
-            % configuration as detected by CV
-        init_conifg                string
-            % final_config is a string that contains the final board
-            % config as decoded from QR code.
-        final_config               string
     end
+
+
 
     methods (Access = private)
 
@@ -46,7 +40,7 @@ classdef gui_final < matlab.apps.AppBase
             %             start(vid);
             
             %setappdata(0,'vid',vid);
-            %setappdata(0,'nmaxframes',nmaxframes);
+            setappdata(0,'nmaxframes',nmaxframes);
         end
 
         % Button pushed function: DecodeQRButton
@@ -95,16 +89,27 @@ classdef gui_final < matlab.apps.AppBase
             % title_txt = sprintf('Image %s',message);
             %             end
             msgbox(message);
-%             d = {1,'R';2,'G';3,'B'};
-%             %app.final_config.Data = d;
-%             % app.final_config.Data = num2cell(message);
-%             app.UITableFinalConfig.ColumnName = {'Position','Color'};
-%             app.UITableFinalConfig.Data = d; 
             
             clear source;
             clear jimg;
             clear bitmap;
             clear wc;            
+            
+        end
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+            % Program to do text to speech.
+            defaultString = 'ka pah dia';
+            caUserInput = char(defaultString); % Convert from cell to string.
+            NET.addAssembly('System.Speech');
+            obj = System.Speech.Synthesis.SpeechSynthesizer;
+            obj.Volume = 100;
+            Speak(obj, caUserInput);
+        end
+
+        % Button pushed function: StartButton
+        function StartButtonPushed(app, event)
             
         end
     end
@@ -141,6 +146,7 @@ classdef gui_final < matlab.apps.AppBase
 
             % Create StartButton
             app.StartButton = uibutton(app.UIFigure, 'push');
+            app.StartButton.ButtonPushedFcn = createCallbackFcn(app, @StartButtonPushed, true);
             app.StartButton.Icon = 'apoorvakapadia.jpg';
             app.StartButton.BackgroundColor = [0 1 0];
             app.StartButton.FontSize = 18;
@@ -149,21 +155,21 @@ classdef gui_final < matlab.apps.AppBase
             app.StartButton.Text = 'Start';
 
             % Create UITable
-            app.UITableInitConfig = uitable(app.UIFigure);
-            app.UITableInitConfig.ColumnName = {'Location'; 'Color'};
-            app.UITableInitConfig.RowName = {};
-            app.UITableInitConfig.Position = [5 104 186 231];
+            app.UITable = uitable(app.UIFigure);
+            app.UITable.ColumnName = {'Location'; 'Color'};
+            app.UITable.RowName = {};
+            app.UITable.Position = [5 104 186 231];
 
             % Create InitialConfigurationLabel
             app.InitialConfigurationLabel = uilabel(app.UIFigure);
             app.InitialConfigurationLabel.Position = [42 343 111 15];
             app.InitialConfigurationLabel.Text = 'Initial Configuration';
 
-            % Create UITableFinalConfig
-            app.UITableFinalConfig = uitable(app.UIFigure);
-            app.UITableFinalConfig.ColumnName = {'Location'; 'Color'};
-            app.UITableFinalConfig.RowName = {};
-            app.UITableFinalConfig.Position = [207 104 186 231];
+            % Create UITable_2
+            app.UITable_2 = uitable(app.UIFigure);
+            app.UITable_2.ColumnName = {'Location'; 'Color'};
+            app.UITable_2.RowName = {};
+            app.UITable_2.Position = [207 104 186 231];
 
             % Create Label
             app.Label = uilabel(app.UIFigure);
@@ -187,6 +193,7 @@ classdef gui_final < matlab.apps.AppBase
 
             % Create Button
             app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
             app.Button.Icon = 'apoorvakapadia.jpg';
             app.Button.Position = [25 11 157 94];
             app.Button.Text = '';
