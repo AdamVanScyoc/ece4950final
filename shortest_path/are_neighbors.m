@@ -14,7 +14,7 @@ for i = 1:length(a)
 end
 
 if (num_difference == 2)
-    if (((a(pos1_diff) == '_' & a(pos2_diff) ~= '_') | (b(pos1_diff) ~= '_' & b(pos2_diff) == '_')) & a(pos1_diff) == b(pos2_diff))
+    if (((a(pos1_diff) == 'X' & a(pos2_diff) ~= 'X') | (b(pos1_diff) ~= 'X' & b(pos2_diff) == 'X')) & a(pos1_diff) == b(pos2_diff))
         TF = true;
     end
 end

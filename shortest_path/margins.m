@@ -1,5 +1,5 @@
 
-shortest_path = traverse('rgy_', 'ryg_')
+shortest_path = traverse('RGYX', 'RYGX')
 
 positions = convert(shortest_path)
 

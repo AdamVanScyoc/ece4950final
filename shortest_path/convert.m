@@ -27,10 +27,10 @@ for i = 1:length(path)-1
     end
     
     
-    if (word1(diff1) == '_')
+    if (word1(diff1) == 'X')
         ops(i,2) = diff1;
         ops(i,1) = diff2;
-    elseif (word1(diff2) == '_')
+    elseif (word1(diff2) == 'X')
         ops(i,2) = diff2;
         ops(i,1) = diff1;
     end
