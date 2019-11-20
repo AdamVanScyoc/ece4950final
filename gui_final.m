@@ -1,5 +1,4 @@
 classdef gui_final < matlab.apps.AppBase
-
     % Properties that correspond to app components
     properties (Access = public)
         UIFigure                   matlab.ui.Figure
@@ -48,6 +47,9 @@ classdef gui_final < matlab.apps.AppBase
             
             %setappdata(0,'vid',vid);
             %setappdata(0,'nmaxframes',nmaxframes);
+            
+            set_param('Final_Project_Controller/Read_LED', 'value', '0');
+            set_param('Final_Project_Controller/Solve_LED', 'value', '0');
         end
 
         % Button pushed function: DecodeQRButton
@@ -58,6 +60,8 @@ classdef gui_final < matlab.apps.AppBase
             clear jimg;
             clear bitmap;
             clear wc; 
+            
+            addpath('./shortest_path');
             
             import com.google.zxing.qrcode.*;
             import com.google.zxing.client.j2se.*;
@@ -100,6 +104,9 @@ classdef gui_final < matlab.apps.AppBase
             a = [];
             for b = 1:length(message)
                 a(b) = int32(b);
+                if message(b) == 'B'
+                    message(b) = 'Y';
+                end
             end
             data = [num2cell(a); num2cell(message)]';
             app.UITableFinalConfig.Data = data;
@@ -129,7 +136,25 @@ classdef gui_final < matlab.apps.AppBase
             % TODO: start timer
             % TODO: start progress 
             % compute shortest path
-            shortest_path = traverse('RXXXXXXXXX','XXXXXXXXXR')
+%             shortest_path = traverse('GYRRXXXXXX','XXXXXXRRYG');
+%             shortest_path = traverse('RXXXXXXXXX','XXXXXXXXXR')
+            %shortest_path = traverse('RGYGXYRRYG',char(app.final_config));
+            %whatAdamWasGivingUs = "GRYGXYRRYG";
+            qr_code_in = app.final_config;
+            final_state = [];
+            % TODO 1:10
+
+            final_state = char(qr_code_in)
+
+            %disp(app.final_config);
+            %disp(char(app.final_config));
+            
+            %final_state = char(whatAdamWasGivingUs);
+            %disp(final_state);
+            fprintf("FIRST %s\n",final_state);
+            disp(class('XYGR'));
+            shortest_path = traverse('RGYXRGYRGY',final_state);
+
 
 %            shortest_path = traverse(char(app.init_con%fig), char(app.final_config))
             
@@ -275,6 +300,9 @@ classdef gui_final < matlab.apps.AppBase
         % Code that executes before app deletion
         function delete(app)
 
+            set_param('Final_Project_Controller/Read_LED', 'value', '0');
+            set_param('Final_Project_Controller/Solve_LED', 'value', '0');
+            
             % Delete UIFigure when app is deleted
             delete(app.UIFigure)
         end
