@@ -116,9 +116,12 @@ classdef gui_final < matlab.apps.AppBase
         % Button pushed function: Read Board
         function ReadButtonPushed(app, event)
             addpath './cv'
-            final_cv
+            firstData = final_cv();
+            firstString = convert_to_string(firstData);
             % rotate 90 degrees now
-            final_cv
+            secondData = final_cv();
+            % figure out the order of each
+            %lace together the ordered data
             rmpath './cv'
         end
     end

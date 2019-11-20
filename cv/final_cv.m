@@ -2,6 +2,9 @@ function rVal = final_cv()
 
     im = imread('./final_sample.jpg');
 
+    %read from webcam here
+    %im = wc();
+    
     dims = size(im);
     rows = dims(1);
     cols = dims(2);
@@ -9,10 +12,6 @@ function rVal = final_cv()
     lowThreshold = 180;
     highThreshold = 80;
     varianceThreshold = 20;
-    %varianceThreshold = 5;
-    %disp(rows);
-    %disp(cols);
-    %disp(size(im));
     for y=1:rows
         if y == rows/2
             % Receive data from UI to CV
@@ -63,11 +62,9 @@ function rVal = final_cv()
                     builder_image(y,x,3) = im(y,x,3);
                 end
             end
-            %disp(im(y,x));
-            %pause();
         end
     end
-    thresholded_image = builder_image;
+    %thresholded_image = builder_image;
     binary_image = imbinarize(rgb2gray(builder_image));
     props = regionprops(binary_image);
     centroids = cat(1,props.Centroid);
@@ -76,12 +73,12 @@ function rVal = final_cv()
 
     MinAreaThreshold = 50;
     output_image = im;
-    shapes = [];
+    shapes = {};
     if numShapes > 0
         for n =1:numShapes
             if areas(n) > MinAreaThreshold
                 desc = '';
-                currentShape = ['','','',''];
+                currentShape = [0,0,0];
                 currentShape(1) = centroids(n,1);
                 currentShape(2) = centroids(n,2);
                 xcoord = round(centroids(n,1));
