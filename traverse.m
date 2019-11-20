@@ -15,21 +15,21 @@ LED_COUNT = 1;
 set_param('Final_Project_Controller/Read_LED', 'value', '1');
 
 for r = 1:length(words)
+    if (mod(r, length(words) / 3) == 0)
+        fprintf("Iteration %d of %d\n", r, length(words));
+        LED_COUNT = LED_COUNT + 1
+        set_param('Final_Project_Controller/Read_LED', 'value', num2str(LED_COUNT));
+    end
+    
     for c = 1:length(words)
         if (are_neighbors(words(r,:),words(c,:)) == true)
             adjmat(r,c) = 1;
             adjmat(c,r) = 1;
         end
     end
-    
-    if (mod(r, length(words) / 3) == 0)
-        fprintf("Iteration %d of %d\n", r, length(words));
-        LED_COUNT = LED_COUNT + 1
-        set_param('Final_Project_Controller/Read_LED', 'value', num2str(LED_COUNT));
-    end
 end
 
-
+pause(4);
 set_param('Final_Project_Controller/Read_LED', 'value', '5');
 
 words = cellstr(words);

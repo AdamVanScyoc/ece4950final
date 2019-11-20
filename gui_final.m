@@ -21,6 +21,7 @@ classdef gui_final < matlab.apps.AppBase
         % as decoded from the QR code; stored in the Final Configuration
         % table.
         final_config               string
+        positions
     end
 
 
@@ -75,13 +76,9 @@ classdef gui_final < matlab.apps.AppBase
             
             %wc = webcam('HD WebCam');
             %wc = webcam('HD USB Webcam');
-            wc = webcam(1);
-
-            %preview(wc);
-            
+            wc = webcam(1);            
             
             message = '';
-            %break;
             while strcmp(message, '') == 1
                 im = snapshot(wc);
                 imshow(im,'Parent',ax);
@@ -93,16 +90,12 @@ classdef gui_final < matlab.apps.AppBase
             
                 try
                     result = qr_reader.decode(bitmap);
-                    %parsedResult = ResultParser.parseResult(result);
                     message = char(result.getText());
-            %                     break;
                 catch e
                     message = '';
                 end
             end % while
             
-            % title_txt = sprintf('Image %s',message);
-            %             end
             msgbox(message);
             app.final_config = message;
             a = [];
@@ -113,9 +106,7 @@ classdef gui_final < matlab.apps.AppBase
                 end
             end
             data = [num2cell(a); num2cell(message)]';
-            app.UITableFinalConfig.Data = data;
-            %app.UITableInitConfig.Data = num2cell(app.init_config);
-            
+            app.UITableFinalConfig.Data = data;         
             
             clear source;
             clear jimg;
@@ -137,43 +128,13 @@ classdef gui_final < matlab.apps.AppBase
 
         % Button pushed function: StartButton
         function StartButtonPushed(app, event)
-            % TODO: start timer
-            % TODO: start progress 
-            % compute shortest path
-%             shortest_path = traverse('GYRRXXXXXX','XXXXXXRRYG');
-%             shortest_path = traverse('RXXXXXXXXX','XXXXXXXXXR')
-            %shortest_path = traverse('RGYGXYRRYG',char(app.final_config));
-            %whatAdamWasGivingUs = "GRYGXYRRYG";
-            qr_code_in = app.final_config;
-            final_state = [];
-            init_state = [];
 
-            % TODO 1:10
-
-            final_state = char(qr_code_in)
-            init_state = char(app.init_config)
-
-            %disp(app.final_config);
-            %disp(char(app.final_config));
-            
-            %final_state = char(whatAdamWasGivingUs);
-            %disp(final_state);
-            fprintf("FIRST %s\n",final_state);
-            disp(class('XYGR'));
-            shortest_path = traverse(init_state,final_state);
-
-
-%            shortest_path = traverse(char(app.init_con%fig), char(app.final_config))
-            
-            % convert string argument to number pairs represenenting
-            % arm position
-            positions = convert(shortest_path)
             
             % start timer
             tic
             
             % perform arm movements
-            enact(positions)
+            enact(app.positions)
             
               % update time edit box
             t = toc
@@ -186,18 +147,23 @@ classdef gui_final < matlab.apps.AppBase
         function ReadButtonPushed(app, event)
             addpath './cv'
             %firstData = final_cv();
+            disp('Rotate to 0');
             set_param('Final_Project_Controller/DC','value','0');
             pause(1);
             pause(1);
-            firstString = convert_to_string(final_cv());
-            %disp(firstString);
+            disp('Take first photo');
+            firstString = convert_to_string(final_cv(0));
+            disp(firstString);
             pause(1);
             pause(1);
+            disp('Rotate to 90');
             set_param('Final_Project_Controller/DC','value','90');
             pause(2);
             pause(2);
-            secondString = convert_to_string(final_cv());
+            disp('Take Second Photo & Rotate to 0');
+            secondString = convert_to_string(final_cv(1));
             set_param('Final_Project_Controller/DC','value','0');
+            disp('Merge Strings');
             for i=1:10
                 if firstString(i) == 'X'
                     firstString(i) = secondString(i);
@@ -209,6 +175,33 @@ classdef gui_final < matlab.apps.AppBase
             % figure out the order of each
             %lace together the ordered data
             rmpath './cv'
+            
+            % pre-compute quickest solution
+            final_state = [];
+            init_state = [];
+%             if (app.final_config ~= '')
+                qr_code_in = app.final_config;
+
+
+                final_state = char(qr_code_in)
+                init_state = char(app.init_config)
+                
+                % add Initial board configuration string to GUI table
+                a = [];
+                for b = 1:length(init_state)
+                    a(b) = int32(b);
+                end
+                data = [num2cell(a); num2cell(init_state)]';
+                app.UITableInitConfig.Data = data; 
+
+                fprintf("FIRST %s\n",final_state);
+                shortest_path = traverse(init_state,final_state);
+
+                % convert string argument to number pairs representing
+                % arm position
+                app.positions = convert(shortest_path)
+%             end % if (app.final_config != '')
+            
         end
     end
 
