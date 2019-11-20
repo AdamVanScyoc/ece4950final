@@ -73,8 +73,12 @@ classdef gui_final < matlab.apps.AppBase
             ui = uifigure();
             ax = uiaxes('Parent',ui);
             
-            wc = webcam('HD WebCam');
+            %wc = webcam('HD WebCam');
+            %wc = webcam('HD USB Webcam');
+            wc = webcam(1);
+
             %preview(wc);
+            
             
             message = '';
             %break;
@@ -142,9 +146,12 @@ classdef gui_final < matlab.apps.AppBase
             %whatAdamWasGivingUs = "GRYGXYRRYG";
             qr_code_in = app.final_config;
             final_state = [];
+            init_state = [];
+
             % TODO 1:10
 
             final_state = char(qr_code_in)
+            init_state = char(app.init_config)
 
             %disp(app.final_config);
             %disp(char(app.final_config));
@@ -153,7 +160,7 @@ classdef gui_final < matlab.apps.AppBase
             %disp(final_state);
             fprintf("FIRST %s\n",final_state);
             disp(class('XYGR'));
-            shortest_path = traverse('RGYXRGYRGY',final_state);
+            shortest_path = traverse(init_state,final_state);
 
 
 %            shortest_path = traverse(char(app.init_con%fig), char(app.final_config))
@@ -179,16 +186,25 @@ classdef gui_final < matlab.apps.AppBase
         function ReadButtonPushed(app, event)
             addpath './cv'
             %firstData = final_cv();
+            set_param('Final_Project_Controller/DC','value','0');
+            pause(1);
+            pause(1);
             firstString = convert_to_string(final_cv());
             %disp(firstString);
+            pause(1);
+            pause(1);
             set_param('Final_Project_Controller/DC','value','90');
+            pause(2);
+            pause(2);
             secondString = convert_to_string(final_cv());
+            set_param('Final_Project_Controller/DC','value','0');
             for i=1:10
                 if firstString(i) == 'X'
                     firstString(i) = secondString(i);
                 end
             end
             disp(firstString);
+            app.init_config = string(firstString);
             %set_param('Final_Project_Controller/DC','value','0');
             % figure out the order of each
             %lace together the ordered data

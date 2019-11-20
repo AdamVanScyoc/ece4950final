@@ -1,14 +1,15 @@
 function rVal = final_cv()
     %im = imread('./board_sample1.png');
     cam = '';
-    cam = webcam(2);
+    imaqreset();
+    cam = webcam('HP USB Webcam');
     im = snapshot(cam);
     
     dims = size(im);
     rows = dims(1);
     cols = dims(2);
     builder_image = im;
-    lowThreshold = 110;
+    lowThreshold = 150;
     highThreshold = 30;
     varianceThreshold = 40;
     varianceStartThreshold = 80;
@@ -64,9 +65,9 @@ function rVal = final_cv()
                         builder_image(y,x,3) = im(y,x,3);
                     end
                 else
-                    builder_image(y,x,1) = im(y,x,1);
-                    builder_image(y,x,2) = im(y,x,2);
-                    builder_image(y,x,3) = im(y,x,3);
+                    builder_image(y,x,1) = im(y,x,1) + 20;
+                    builder_image(y,x,2) = im(y,x,2) + 20;
+                    builder_image(y,x,3) = im(y,x,3) + 20;
                 end
             end
         end
@@ -90,7 +91,7 @@ function rVal = final_cv()
                 xcoord = round(centroids(n,1));
                 ycoord = round(centroids(n,2));
                 sample_y = ycoord;
-                if areas(n) > 250
+                if areas(n) > 350
                     sample_y = ycoord - 12;
                 end
                 %disp(sample_y);
@@ -112,7 +113,7 @@ function rVal = final_cv()
                 if blue > red
                     currentShape(3) = 2;
                     desc = strcat(desc,'green');
-                elseif red - 35 > green
+                elseif red - 40 > green
                     currentShape(3) = 1;
                     desc = strcat(desc,'red');
                 else
@@ -137,6 +138,7 @@ function rVal = final_cv()
     %btn2.UserData = shapes;
     %disp(size(shapes));
     imshow(output_image);
+    imaqreset();
     %title_txt = sprintf('Image %d',vid.FramesAcquired);
     %title(title_txt);
 end
